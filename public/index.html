@@ -327,9 +327,21 @@ No registration test has been run.
     <p class="muted">
       Data mode: Fictional demonstration
     </p>
+    <p class="status">System Operational</p>
+
+<p class="muted">System Name: Bank Security Lab</p>
+<p class="muted">Environment: Educational Security Laboratory</p>
+<p class="muted">Platform: Node.js / Express</p>
+<p class="muted">Hosting: Render</p>
+<p class="muted">Connection: HTTPS</p>
+<p class="muted">Security Monitoring: Demonstration Mode</p>
+<p class="muted">Incident Storage: Browser Local Storage</p>
+<p class="muted">Credential Monitoring: Fictional Test Data Only</p>
+<p class="muted">Last Dashboard Load: <span id="systemLoadTime"></span></p>
   </section>
 </main>
-
+document.getElementById("systemLoadTime").textContent =
+  new Date().toLocaleString();
 <script>
 const button = document.getElementById("runTest");
 const output = document.getElementById("results");
