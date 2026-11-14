@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1425">
   <title>Bank Security Lab | Security Center</title>
   <style>
     * { box-sizing: border-box; }
@@ -37,11 +38,38 @@
       border-radius: 8px;
       font-size: 15px;
       cursor: pointer;
+      margin: 5px 3px 5px 0;
     }
 
     button:disabled {
       opacity: .5;
       cursor: not-allowed;
+    }
+
+    .delete {
+      background: #a83242;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      margin: 7px 0 14px;
+      border-radius: 8px;
+      border: 1px solid #405574;
+      background: #0b1425;
+      color: white;
+      font-size: 15px;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    label {
+      display: block;
+      color: #c5d5e9;
+      font-size: 14px;
     }
 
     pre {
@@ -58,11 +86,44 @@
       font-weight: bold;
     }
 
-    .warning {
-      color: #ffc46b;
-    }
+    .warning { color: #ffc46b; }
 
     h1 { color: #70b5ff; }
+
+    .incident {
+      background: #0e1b30;
+      border: 1px solid #354b69;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 12px 0;
+    }
+
+    .incident h3 {
+      margin-top: 0;
+      color: #8bc5ff;
+    }
+
+    .incident-meta {
+      color: #aab8cc;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .empty {
+      padding: 18px;
+      border: 1px dashed #405574;
+      border-radius: 8px;
+      color: #aab8cc;
+    }
+
+    .notice {
+      background: #26344a;
+      border-left: 4px solid #ffc46b;
+      padding: 12px;
+      border-radius: 5px;
+      color: #e6d6b8;
+      font-size: 13px;
+    }
   </style>
 </head>
 
@@ -100,6 +161,71 @@
 
     <button id="runEventTest">Analyze fictional events</button>
     <pre id="eventResults">No event analysis has been run.</pre>
+  </section>
+
+  <section class="panel">
+    <h2>3. Incident Response Center</h2>
+
+    <p>
+      Create and track fictional security incidents
+      for educational investigation exercises.
+    </p>
+
+    <div class="notice">
+      Use fictional or sanitized information only.
+      Do not enter passwords, PINs, OTPs, access tokens
+      or confidential customer information.
+    </div>
+
+    <h3>Create incident</h3>
+
+    <form id="incidentForm">
+      <label for="incidentTitle">Incident title</label>
+      <input
+        id="incidentTitle"
+        maxlength="100"
+        placeholder="Example: Suspicious login activity"
+        required
+      >
+
+      <label for="incidentSeverity">Severity</label>
+      <select id="incidentSeverity" required>
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+        <option value="Critical">Critical</option>
+      </select>
+
+      <label for="incidentDescription">Incident description</label>
+      <textarea
+        id="incidentDescription"
+        maxlength="1000"
+        placeholder="Describe the fictional security incident..."
+        required
+      ></textarea>
+
+      <button type="submit">Record incident</button>
+    </form>
+
+    <hr style="border-color:#354b69">
+
+    <h3>Incident records</h3>
+    <p class="muted">
+      <span id="incidentCount">0</span> incidents recorded
+    </p>
+
+    <div id="incidentList">
+      <div class="empty">No incidents recorded yet.</div>
+    </div>
+
+    <button id="clearIncidents" class="delete" type="button">
+      Clear all incidents
+    </button>
+
+    <p class="muted">
+      Storage: This browser only. These records are not
+      uploaded to the server.
+    </p>
   </section>
 
   <section class="panel">
@@ -208,6 +334,141 @@ eventButton.addEventListener("click", () => {
 
   eventButton.disabled = false;
 });
+
+// Incident Response Center
+const incidentForm = document.getElementById("incidentForm");
+const incidentList = document.getElementById("incidentList");
+const incidentCount = document.getElementById("incidentCount");
+const clearButton = document.getElementById("clearIncidents");
+
+const STORAGE_KEY = "bank_security_lab_incidents";
+
+function loadIncidents() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    return Array.isArray(saved) ? saved : [];
+  } catch {
+    return [];
+  }
+}
+
+let incidents = loadIncidents();
+
+function saveIncidents() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(incidents));
+}
+
+function makeElement(tag, className, text) {
+  const element = document.createElement(tag);
+  if (className) element.className = className;
+  if (text !== undefined) element.textContent = text;
+  return element;
+}
+
+function renderIncidents() {
+  incidentList.replaceChildren();
+  incidentCount.textContent = incidents.length;
+
+  if (incidents.length === 0) {
+    incidentList.appendChild(
+      makeElement("div", "empty", "No incidents recorded yet.")
+    );
+    return;
+  }
+
+  incidents.forEach((incident) => {
+    const card = makeElement("article", "incident");
+
+    card.appendChild(makeElement("h3", "", incident.title));
+
+    const description = makeElement("p", "", incident.description);
+    card.appendChild(description);
+
+    const meta = makeElement(
+      "div",
+      "incident-meta",
+      "Severity: " + incident.severity +
+      "\nStatus: " + incident.status +
+      "\nCreated: " + incident.createdAt
+    );
+    meta.style.whiteSpace = "pre-line";
+    card.appendChild(meta);
+
+    const statusLabel = makeElement("label", "", "Update status");
+    const statusSelect = document.createElement("select");
+
+    ["Open", "Investigating", "Resolved"].forEach((status) => {
+      const option = document.createElement("option");
+      option.value = status;
+      option.textContent = status;
+      statusSelect.appendChild(option);
+    });
+
+    statusSelect.value = incident.status;
+
+    statusSelect.addEventListener("change", () => {
+      incident.status = statusSelect.value;
+      saveIncidents();
+      renderIncidents();
+    });
+
+    statusLabel.appendChild(statusSelect);
+    card.appendChild(statusLabel);
+
+    const deleteButton = makeElement(
+      "button",
+      "delete",
+      "Delete incident"
+    );
+
+    deleteButton.type = "button";
+    deleteButton.addEventListener("click", () => {
+      incidents = incidents.filter(item => item.id !== incident.id);
+      saveIncidents();
+      renderIncidents();
+    });
+
+    card.appendChild(deleteButton);
+    incidentList.appendChild(card);
+  });
+}
+
+incidentForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const title = document.getElementById("incidentTitle").value.trim();
+  const severity = document.getElementById("incidentSeverity").value;
+  const description = document.getElementById("incidentDescription").value.trim();
+
+  if (!title || !description) return;
+
+  incidents.unshift({
+    id: Date.now().toString() + Math.random().toString(16).slice(2),
+    title,
+    severity,
+    description,
+    status: "Open",
+    createdAt: new Date().toLocaleString()
+  });
+
+  try {
+    saveIncidents();
+    incidentForm.reset();
+    renderIncidents();
+  } catch {
+    alert("Could not save the incident in this browser.");
+  }
+});
+
+clearButton.addEventListener("click", () => {
+  if (!confirm("Delete all locally stored fictional incidents?")) return;
+
+  incidents = [];
+  saveIncidents();
+  renderIncidents();
+});
+
+renderIncidents();
 </script>
 
 </body>
