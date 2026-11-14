@@ -6,125 +6,239 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b1425">
   <title>Bank Security Lab | Security Center</title>
+<style>
+  
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  color-scheme: dark;
+  --bg: #08111f;
+  --surface: #101e32;
+  --surface-2: #162842;
+  --border: #263d5b;
+  --blue: #38a5ff;
+  --text: #edf5ff;
+  --muted: #9aadc5;
+  --green: #45d6a0;
+  --amber: #ffc46b;
+  --red: #ff6b7a;
+}
+
+body {
+  margin: 0;
+  padding: 16px;
+  background:
+    radial-gradient(ellipse at top, #142d4c 0%, transparent 48%),
+    var(--bg);
+  color: var(--text);
+  font-family: Inter, Arial, sans-serif;
+  line-height: 1.6;
+}
+
+main {
+  max-width: 1050px;
+  margin: 20px auto;
+}
+
+h1 {
+  color: #70baff;
+  font-size: clamp(26px, 5vw, 36px);
+  letter-spacing: -1px;
+  margin-bottom: 4px;
+}
+
+h2 {
+  font-size: 19px;
+  color: #dcecff;
+  margin-top: 0;
+}
+
+h3 {
+  color: #a8d4ff;
+}
+
+main > p.muted {
+  margin-top: 0;
+  margin-bottom: 26px;
+}
+
+.panel {
+  background: linear-gradient(145deg, #14243a, #0f1c30);
+  padding: 22px;
+  border-radius: 16px;
+  margin: 18px 0;
+  border: 1px solid var(--border);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, .18);
+}
+
+.panel h2 {
+  padding-bottom: 13px;
+  border-bottom: 1px solid #263d5b;
+}
+
+button {
+  background: linear-gradient(135deg, #1685ed, #2865d9);
+  color: white;
+  border: 1px solid #4598f3;
+  padding: 13px 18px;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  margin: 5px 3px 5px 0;
+  min-height: 44px;
+  transition: filter .2s ease;
+}
+
+button:hover {
+  filter: brightness(1.15);
+}
+
+button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.delete {
+  background: #8d2e43;
+  border-color: #b34b60;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 13px;
+  margin: 7px 0 15px;
+  border-radius: 9px;
+  border: 1px solid #354d6c;
+  background: #091629;
+  color: white;
+  font-size: 16px;
+  outline: none;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(56, 165, 255, .13);
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+label {
+  display: block;
+  color: #c5d8ee;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: #a9d5ff;
+  font-size: 13px;
+  line-height: 1.7;
+  background: #081321;
+  border: 1px solid #263d5b;
+  border-radius: 10px;
+  padding: 15px;
+  overflow-x: auto;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.status {
+  color: var(--green);
+  font-weight: bold;
+}
+
+.warning {
+  color: var(--amber);
+}
+
+.incident {
+  background: #0b192b;
+  border: 1px solid #2b4565;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 13px 0;
+}
+
+.incident h3 {
+  margin-top: 0;
+  color: #8bc5ff;
+}
+
+.incident-meta {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+.empty {
+  padding: 20px;
+  border: 1px dashed #405574;
+  border-radius: 10px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.notice {
+  background: #2a2a25;
+  border-left: 4px solid var(--amber);
+  padding: 13px;
+  border-radius: 7px;
+  color: #f0d9ae;
+  font-size: 13px;
+  margin: 14px 0;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 22px 0;
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 12px;
+  }
+
+  main {
+    margin: 12px auto;
+  }
+
+  .panel {
+    padding: 17px;
+    margin: 14px 0;
+    border-radius: 13px;
+  }
+
+  h1 {
+    font-size: 27px;
+  }
+
+  h2 {
+    font-size: 17px;
+  }
+
+  button {
+    width: 100%;
+    margin: 5px 0;
+  }
+}
+
   <style>
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      padding: 20px;
-      background: #0b1425;
-      color: #f1f5f9;
-      font-family: Arial, sans-serif;
-    }
-
-    main {
-      max-width: 850px;
-      margin: 30px auto;
-    }
-
-    .panel {
-      background: #17243a;
-      padding: 22px;
-      border-radius: 14px;
-      margin: 18px 0;
-      border: 1px solid #293c58;
-    }
-
-    button {
-      background: #2878e8;
-      color: white;
-      border: 0;
-      padding: 13px 18px;
-      border-radius: 8px;
-      font-size: 15px;
-      cursor: pointer;
-      margin: 5px 3px 5px 0;
-    }
-
-    button:disabled {
-      opacity: .5;
-      cursor: not-allowed;
-    }
-
-    .delete {
-      background: #a83242;
-    }
-
-    input, textarea, select {
-      width: 100%;
-      padding: 12px;
-      margin: 7px 0 14px;
-      border-radius: 8px;
-      border: 1px solid #405574;
-      background: #0b1425;
-      color: white;
-      font-size: 15px;
-    }
-
-    textarea {
-      min-height: 90px;
-      resize: vertical;
-    }
-
-    label {
-      display: block;
-      color: #c5d5e9;
-      font-size: 14px;
-    }
-
-    pre {
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-      color: #a9d5ff;
-      font-size: 13px;
-    }
-
-    .muted { color: #aab8cc; }
-
-    .status {
-      color: #55d6a3;
-      font-weight: bold;
-    }
-
-    .warning { color: #ffc46b; }
-
-    h1 { color: #70b5ff; }
-
-    .incident {
-      background: #0e1b30;
-      border: 1px solid #354b69;
-      border-radius: 10px;
-      padding: 15px;
-      margin: 12px 0;
-    }
-
-    .incident h3 {
-      margin-top: 0;
-      color: #8bc5ff;
-    }
-
-    .incident-meta {
-      color: #aab8cc;
-      font-size: 13px;
-      line-height: 1.8;
-    }
-
-    .empty {
-      padding: 18px;
-      border: 1px dashed #405574;
-      border-radius: 8px;
-      color: #aab8cc;
-    }
-
-    .notice {
-      background: #26344a;
-      border-left: 4px solid #ffc46b;
-      padding: 12px;
-      border-radius: 5px;
-      color: #e6d6b8;
-      font-size: 13px;
-    }
-  </style>
 </head>
 
 <body>
