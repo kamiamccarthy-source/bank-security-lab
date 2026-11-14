@@ -5,302 +5,382 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b1425">
+  <meta name="description" content="Bank Security Lab - Fictional security monitoring and incident response dashboard.">
   <title>Bank Security Lab | Security Center</title>
-<style>
-  
-* {
-  box-sizing: border-box;
-}
 
-:root {
-  color-scheme: dark;
-  --bg: #08111f;
-  --surface: #101e32;
-  --surface-2: #162842;
-  --border: #263d5b;
-  --blue: #38a5ff;
-  --text: #edf5ff;
-  --muted: #9aadc5;
-  --green: #45d6a0;
-  --amber: #ffc46b;
-  --red: #ff6b7a;
-}
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-body {
-  margin: 0;
-  padding: 16px;
-  background:
-    radial-gradient(ellipse at top, #142d4c 0%, transparent 48%),
-    var(--bg);
-  color: var(--text);
-  font-family: Inter, Arial, sans-serif;
-  line-height: 1.6;
-}
+    :root {
+      color-scheme: dark;
+      --bg: #08111f;
+      --panel: #101d30;
+      --panel2: #14243a;
+      --border: #263b56;
+      --text: #edf4ff;
+      --muted: #91a5bf;
+      --blue: #3b82f6;
+      --green: #22c55e;
+      --yellow: #f59e0b;
+      --red: #ef4444;
+      --purple: #a78bfa;
+    }
 
-main {
-  max-width: 1050px;
-  margin: 20px auto;
-}
+    body {
+      margin: 0;
+      padding: 20px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+    }
 
-h1 {
-  color: #70baff;
-  font-size: clamp(26px, 5vw, 36px);
-  letter-spacing: -1px;
-  margin-bottom: 4px;
-}
+    .container {
+      width: 100%;
+      max-width: 1150px;
+      margin: auto;
+    }
 
-h2 {
-  font-size: 19px;
-  color: #dcecff;
-  margin-top: 0;
-}
+    header {
+      padding: 25px;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #142c4b, #101d30);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
 
-h3 {
-  color: #a8d4ff;
-}
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 27px;
+    }
 
-main > p.muted {
-  margin-top: 0;
-  margin-bottom: 26px;
-}
+    header p {
+      color: var(--muted);
+      margin: 0;
+    }
 
-.panel {
-  background: linear-gradient(145deg, #14243a, #0f1c30);
-  padding: 22px;
-  border-radius: 16px;
-  margin: 18px 0;
-  border: 1px solid var(--border);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, .18);
-}
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
 
-.panel h2 {
-  padding-bottom: 13px;
-  border-bottom: 1px solid #263d5b;
-}
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: #86efac;
+      font-size: 13px;
+      font-weight: bold;
+    }
 
-button {
-  background: linear-gradient(135deg, #1685ed, #2865d9);
-  color: white;
-  border: 1px solid #4598f3;
-  padding: 13px 18px;
-  border-radius: 9px;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  margin: 5px 3px 5px 0;
-  min-height: 44px;
-  transition: filter .2s ease;
-}
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      background: var(--green);
+      border-radius: 50%;
+    }
 
-button:hover {
-  filter: brightness(1.15);
-}
+    .notice {
+      padding: 13px 15px;
+      margin: 16px 0;
+      border: 1px solid #725b27;
+      background: #332914;
+      color: #fcd98b;
+      border-radius: 10px;
+      font-size: 13px;
+    }
 
-button:disabled {
-  opacity: .5;
-  cursor: not-allowed;
-}
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
 
-.delete {
-  background: #8d2e43;
-  border-color: #b34b60;
-}
+    .stat {
+      padding: 18px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
 
-input,
-textarea,
-select {
-  width: 100%;
-  padding: 13px;
-  margin: 7px 0 15px;
-  border-radius: 9px;
-  border: 1px solid #354d6c;
-  background: #091629;
-  color: white;
-  font-size: 16px;
-  outline: none;
-}
+    .stat span {
+      color: var(--muted);
+      font-size: 13px;
+    }
 
-input:focus,
-textarea:focus,
-select:focus {
-  border-color: var(--blue);
-  box-shadow: 0 0 0 3px rgba(56, 165, 255, .13);
-}
+    .stat strong {
+      display: block;
+      font-size: 25px;
+      margin-top: 6px;
+    }
 
-textarea {
-  min-height: 100px;
-  resize: vertical;
-}
+    .panel {
+      padding: 20px;
+      margin-bottom: 18px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
 
-label {
-  display: block;
-  color: #c5d8ee;
-  font-size: 13px;
-  font-weight: 600;
-}
+    .panel h2 {
+      font-size: 19px;
+      margin: 0 0 8px;
+    }
 
-pre {
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-  color: #a9d5ff;
-  font-size: 13px;
-  line-height: 1.7;
-  background: #081321;
-  border: 1px solid #263d5b;
-  border-radius: 10px;
-  padding: 15px;
-  overflow-x: auto;
-}
+    .panel > p {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 0;
+    }
 
-.muted {
-  color: var(--muted);
-  font-size: 14px;
-}
+    button, select, input, textarea {
+      font: inherit;
+    }
 
-.status {
-  color: var(--green);
-  font-weight: bold;
-}
+    button {
+      padding: 11px 16px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--blue);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
 
-.warning {
-  color: var(--amber);
-}
+    button:hover {
+      filter: brightness(1.12);
+    }
 
-.incident {
-  background: #0b192b;
-  border: 1px solid #2b4565;
-  border-radius: 12px;
-  padding: 16px;
-  margin: 13px 0;
-}
+    button:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
 
-.incident h3 {
-  margin-top: 0;
-  color: #8bc5ff;
-}
+    .secondary {
+      background: #334861;
+    }
 
-.incident-meta {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.9;
-}
+    .danger {
+      background: #9f3030;
+    }
 
-.empty {
-  padding: 20px;
-  border: 1px dashed #405574;
-  border-radius: 10px;
-  color: var(--muted);
-  text-align: center;
-}
+    .delete {
+      background: #8f3030;
+      margin-top: 10px;
+    }
 
-.notice {
-  background: #2a2a25;
-  border-left: 4px solid var(--amber);
-  padding: 13px;
-  border-radius: 7px;
-  color: #f0d9ae;
-  font-size: 13px;
-  margin: 14px 0;
-}
+    .output {
+      margin-top: 15px;
+      padding: 14px;
+      background: #07101c;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      color: #b8d6ff;
+      font-size: 12px;
+      min-height: 45px;
+    }
 
-hr {
-  border: 0;
-  border-top: 1px solid var(--border);
-  margin: 22px 0;
-}
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 14px;
+    }
 
-@media (max-width: 600px) {
-  body {
-    padding: 12px;
-  }
+    label {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--muted);
+      font-size: 13px;
+    }
 
-  main {
-    margin: 12px auto;
-  }
+    input, select, textarea {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #091525;
+      color: var(--text);
+      margin-bottom: 13px;
+    }
 
-  .panel {
-    padding: 17px;
-    margin: 14px 0;
-    border-radius: 13px;
-  }
+    textarea {
+      min-height: 95px;
+      resize: vertical;
+    }
 
-  h1 {
-    font-size: 27px;
-  }
+    .incident {
+      padding: 15px;
+      margin-top: 12px;
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
 
-  h2 {
-    font-size: 17px;
-  }
+    .incident h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
 
-  button {
-    width: 100%;
-    margin: 5px 0;
-  }
-}
-</style>
+    .incident p {
+      color: #c4d2e4;
+      overflow-wrap: anywhere;
+    }
+
+    .incident-meta {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: pre-line;
+      margin: 10px 0;
+    }
+
+    .empty {
+      padding: 20px;
+      text-align: center;
+      color: var(--muted);
+      border: 1px dashed var(--border);
+      border-radius: 9px;
+      margin-top: 12px;
+    }
+
+    .chart-row {
+      margin: 15px 0;
+    }
+
+    .chart-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .bar {
+      height: 10px;
+      background: #263b56;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: 0;
+      background: var(--blue);
+      border-radius: 20px;
+    }
+
+    .timeline-item {
+      border-left: 2px solid var(--blue);
+      padding: 4px 0 15px 15px;
+      margin-left: 6px;
+    }
+
+    .timeline-item strong {
+      display: block;
+    }
+
+    .timeline-item small {
+      color: var(--muted);
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 12px;
+      }
+
+      header {
+        padding: 18px;
+      }
+
+      header h1 {
+        font-size: 22px;
+      }
+
+      .panel {
+        padding: 15px;
+      }
+    }
+  </style>
 </head>
- 
 
 <body>
-<main>
-  <h1>Bank Security Lab</h1>
-  <p class="muted">Security Monitoring Center</p>
+<div class="container">
+
+  <header>
+    <div class="topline">
+      <div class="status">
+        <span class="status-dot"></span>
+        LAB INTERFACE ONLINE
+      </div>
+      <span style="color:#91a5bf;font-size:12px;">VERSION 2.0</span>
+    </div>
+
+    <h1>Bank Security Lab</h1>
+    <p>Security Monitoring &amp; Incident Response Center</p>
+  </header>
+
+  <div class="notice">
+    EDUCATIONAL LAB: All findings and events displayed here are fictional
+    demonstrations. This dashboard does not connect to bank systems or
+    collect real customer credentials.
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <span>Recorded incidents</span>
+      <strong id="incidentCount">0</strong>
+    </div>
+    <div class="stat">
+      <span>Critical incidents</span>
+      <strong id="criticalCount">0</strong>
+    </div>
+    <div class="stat">
+      <span>Open incidents</span>
+      <strong id="openCount">0</strong>
+    </div>
+    <div class="stat">
+      <span>System status</span>
+      <strong style="color:#22c55e;">Online</strong>
+    </div>
+  </div>
 
   <section class="panel">
     <h2>1. Credential Security Monitor</h2>
-    <p>
-      Demonstrates detection of simulated password,
-      PIN, OTP and access-token exposure indicators.
-    </p>
-    <p class="muted">
-      Uses fictional examples only. No real credentials
-      are requested or collected.
-    </p>
-
-    <button id="runTest">Run fictional credential test</button>
-    <pre id="results">No test has been run.</pre>
+    <p>Run a fictional demonstration of credential exposure indicators.</p>
+    <button type="button" id="runTest">Run Demonstration</button>
+    <div class="output" id="results">No demonstration has been run.</div>
   </section>
 
   <section class="panel">
     <h2>2. Security Event Analyzer</h2>
-    <p>
-      Demonstrates rule-based analysis of fictional
-      authentication events.
-    </p>
-
-    <p class="muted">
-      Preview only. Actual server-side analysis requires
-      authenticated access to the protected API.
-    </p>
-
-    <button id="runEventTest">Analyze fictional events</button>
-    <pre id="eventResults">No event analysis has been run.</pre>
+    <p>Analyze simulated authentication and MFA activity.</p>
+    <button type="button" id="runEventTest">Analyze Fictional Events</button>
+    <div class="output" id="eventResults">Waiting for event analysis.</div>
   </section>
 
   <section class="panel">
     <h2>3. Incident Response Center</h2>
-
-    <p>
-      Create and track fictional security incidents
-      for educational investigation exercises.
-    </p>
-
-    <div class="notice">
-      Use fictional or sanitized information only.
-      Do not enter passwords, PINs, OTPs, access tokens
-      or confidential customer information.
-    </div>
-
-    <h3>Create incident</h3>
+    <p>Create and manage fictional security incidents stored in this browser.</p>
 
     <form id="incidentForm">
       <label for="incidentTitle">Incident title</label>
-      <input
-        id="incidentTitle"
-        maxlength="100"
-        placeholder="Example: Suspicious login activity"
-        required
-      >
+      <input id="incidentTitle" maxlength="100" required
+        placeholder="Example: Suspicious login activity">
 
       <label for="incidentSeverity">Severity</label>
       <select id="incidentSeverity" required>
@@ -310,262 +390,214 @@ hr {
         <option value="Critical">Critical</option>
       </select>
 
-      <label for="incidentDescription">Incident description</label>
-      <textarea
-        id="incidentDescription"
-        maxlength="1000"
-        placeholder="Describe the fictional security incident..."
-        required
-      ></textarea>
+      <label for="incidentDescription">Description</label>
+      <textarea id="incidentDescription" maxlength="1000"
+        required placeholder="Describe the fictional incident..."></textarea>
 
-      <button type="submit">Record incident</button>
+      <button type="submit">Record Incident</button>
     </form>
 
-    <hr style="border-color:#354b69">
+    <div id="incidentList"></div>
 
-    <h3>Incident records</h3>
-    <p class="muted">
-      <span id="incidentCount">0</span> incidents recorded
-    </p>
+    <button type="button" class="danger" id="clearIncidents">
+      Clear All Incidents
+    </button>
+  </section>
 
-    <div id="incidentList">
-      <div class="empty">No incidents recorded yet.</div>
-    </div>
+  <section class="panel">
+    <h2>4. Incident Report Generator</h2>
+    <p>Generate a downloadable report from locally recorded incidents.</p>
+    <button type="button" id="generateReport">Generate Report</button>
+    <div class="output" id="reportPreview">No report generated.</div>
+  </section>
 
-    <button id="clearIncidents" class="delete" type="button">
-      Clear all incidents
+  <section class="panel">
+    <h2>5. Security Analytics Dashboard</h2>
+    <p>Incident statistics based on records stored in this browser.</p>
+
+    <div id="analyticsSummary"></div>
+    <div id="severityChart"></div>
+    <div id="statusChart"></div>
+
+    <button type="button" class="secondary" id="refreshAnalytics">
+      Refresh Analytics
+    </button>
+  </section>
+
+  <section class="panel">
+    <h2>6. Incident Activity Timeline</h2>
+    <p>Chronological view of recorded incidents.</p>
+    <div id="incidentTimeline"></div>
+
+    <button type="button" class="secondary" id="refreshTimeline">
+      Refresh Timeline
+    </button>
+  </section>
+
+  <section class="panel">
+    <h2>7. Registration Validation Test</h2>
+    <p>Test local validation using fictional invalid registration data.
+      No registration request is sent to the server.</p>
+
+    <button type="button" id="runRegistrationTest">
+      Run Validation Test
     </button>
 
-    <p class="muted">
-      Storage: This browser only. These records are not
-      uploaded to the server.
-    </p>
+    <div class="output" id="registrationResults">
+      No validation test has been run.
+    </div>
   </section>
 
-<section class="panel">
-  <h2>4. Incident Report Generator</h2>
-
-  <p>
-    Generate a downloadable report of fictional
-    security incidents recorded in this browser.
-  </p>
-
-  <div class="notice">
-    Reports contain only locally recorded fictional
-    or sanitized incident information.
-  </div>
-
-  <button id="generateReport">
-    Generate incident report
-  </button>
-
-  <pre id="reportPreview">No report generated yet.</pre>
-</section>
-
-<section class="panel">
-  <h2>5. Security Analytics Dashboard</h2>
-
-  <p class="muted">
-    Statistics calculated from locally recorded fictional incidents.
-  </p>
-
-  <div id="analyticsSummary">
-    Analytics will appear here.
-  </div>
-
-  <h3>Incident severity distribution</h3>
-  <div id="severityChart"></div>
-
-  <h3>Incident status distribution</h3>
-  <div id="statusChart"></div>
-
-  <button id="refreshAnalytics" type="button">
-    Refresh analytics
-  </button>
-</section>
-<section class="panel">
-  <h2>6. Incident Activity Timeline</h2>
-
-  <p class="muted">
-    Chronological view of locally recorded fictional incidents.
-  </p>
-
-  <div id="incidentTimeline">
-    No incident activity available.
-  </div>
-
-  <button id="refreshTimeline" type="button">
-    Refresh timeline
-  </button>
-</section>
   <section class="panel">
-  <h2>7. Registration Validation Test</h2>
-
-  <p>
-    Test whether the lab registration endpoint correctly
-    rejects invalid registration information.
-  </p>
-
-  <div class="notice">
-    Fictional test data only. Never enter real passwords,
-    PINs, OTPs or personal information.
-  </div>
-
-  <label for="testName">Fictional name</label>
-  <input id="testName" value="Test User">
-
-  <label for="testEmail">Test email</label>
-  <input id="testEmail" value="not-an-email">
-
-  <label for="testPassword">Fictional test password</label>
-  <input
-    id="testPassword"
-    type="password"
-    value="FakeTestPassword123!"
-  >
-
-  <button id="runRegistrationTest" type="button">
-    Test registration validation
-  </button>
-
-  <pre id="registrationResults">
-No registration test has been run.
-  </pre>
-</section>
-  <section class="panel">
-    <h2>System information</h2>
-    <p class="status">Dashboard loaded</p>
-    <p class="muted">
-      Environment: Educational security laboratory
-    </p>
-    <p class="muted">
-      Data mode: Fictional demonstration
-    </p>
-    <p class="status">System Operational</p>
-
-<p class="muted">System Name: Bank Security Lab</p>
-<p class="muted">Environment: Educational Security Laboratory</p>
-<p class="muted">Platform: Node.js / Express</p>
-<p class="muted">Hosting: Render</p>
-<p class="muted">Connection: HTTPS</p>
-<p class="muted">Security Monitoring: Demonstration Mode</p>
-<p class="muted">Incident Storage: Browser Local Storage</p>
-<p class="muted">Credential Monitoring: Fictional Test Data Only</p>
-<p class="muted">Last Dashboard Load: <span id="systemLoadTime"></span></p>
+    <h2>8. System Information</h2>
+    <div class="incident-meta">
+      Application: Bank Security Lab
+      Environment: Browser-based demonstration
+      Data storage: Local browser storage
+      External bank connections: None
+      Real credential collection: Disabled
+      </div>
+    <p>Dashboard loaded: <strong id="systemLoadTime">Loading...</strong></p>
   </section>
-</main>
+
+  <footer>
+    Bank Security Lab · Educational Security Demonstration<br>
+    Simple. Secure. Responsible.
+  </footer>
+
+</div>
+
 <script>
-const button = document.getElementById("runTest");
-const output = document.getElementById("results");
+"use strict";
 
+// BANK SECURITY LAB - SINGLE SCRIPT
+// All demonstrations use fictional data only.
 
-const loadTime = document.getElementById("systemLoadTime");
+const getElement = (id) => document.getElementById(id);
+
+const loadTime = getElement("systemLoadTime");
 
 if (loadTime) {
   loadTime.textContent = new Date().toLocaleString();
 }
 
+// 1. FICTIONAL CREDENTIAL SECURITY DEMONSTRATION
 
-button.addEventListener("click", () => {
-  button.disabled = true;
+const button = getElement("runTest");
+const output = getElement("results");
 
-  const results = [
-    {
-      category: "Password",
-      status: "DETECTED",
-      risk: "High",
-      detail: "Fictional password exposure indicator"
-    },
-    {
-      category: "PIN",
-      status: "DETECTED",
-      risk: "High",
-      detail: "Fictional PIN exposure indicator"
-    },
-    {
-      category: "OTP",
-      status: "DETECTED",
-      risk: "High",
-      detail: "Fictional OTP exposure indicator"
-    },
-    {
-      category: "Access token",
-      status: "DETECTED",
-      risk: "High",
-      detail: "Fictional token exposure indicator"
-    }
-  ];
+if (button && output) {
+  button.addEventListener("click", () => {
+    button.disabled = true;
 
-  output.textContent = JSON.stringify({
-    message: "Fictional demonstration completed",
-    totalFindings: results.length,
-    results
-  }, null, 2);
+    const results = [
+      {
+        category: "Password",
+        status: "DETECTED",
+        risk: "High",
+        detail: "Fictional password exposure indicator"
+      },
+      {
+        category: "PIN",
+        status: "DETECTED",
+        risk: "High",
+        detail: "Fictional PIN exposure indicator"
+      },
+      {
+        category: "OTP",
+        status: "DETECTED",
+        risk: "High",
+        detail: "Fictional OTP exposure indicator"
+      },
+      {
+        category: "Access token",
+        status: "DETECTED",
+        risk: "High",
+        detail: "Fictional token exposure indicator"
+      }
+    ];
 
-  button.disabled = false;
-});
-const eventButton = document.getElementById("runEventTest");
-const eventOutput = document.getElementById("eventResults");
+    output.textContent = JSON.stringify({
+      message: "Fictional demonstration completed",
+      totalFindings: results.length,
+      results
+    }, null, 2);
 
-eventButton.addEventListener("click", () => {
-  eventButton.disabled = true;
+    button.disabled = false;
+  });
+}
 
-  const events = [
-    ...Array.from({ length: 5 }, () => ({
-      eventType: "login_failed",
-      actorId: "lab-user-001"
-    })),
-    {
-      eventType: "login_success",
-      actorId: "lab-user-001"
-    },
-    ...Array.from({ length: 3 }, () => ({
-      eventType: "mfa_failed",
-      actorId: "lab-user-002"
-    }))
-  ];
+// 2. FICTIONAL SECURITY EVENT ANALYZER
 
-  const findings = [
-    {
-      type: "Repeated failed logins",
-      severity: "High",
-      evidence: "Five fictional failed login events",
-      recommendation: "Review authentication activity."
-    },
-    {
-      type: "Login success after repeated failures",
-      severity: "Critical",
-      evidence: "A fictional successful login followed five failures",
-      recommendation: "Verify the login using authorized audit records."
-    },
-    {
-      type: "Repeated MFA failures",
-      severity: "High",
-      evidence: "Three fictional MFA failures",
-      recommendation: "Review MFA alerts and verify the activity."
-    }
-  ];
+const eventButton = getElement("runEventTest");
+const eventOutput = getElement("eventResults");
 
-  eventOutput.textContent = JSON.stringify({
-    message: "Fictional event analysis preview completed",
-    analyzedEvents: events.length,
-    findingsCount: findings.length,
-    findings
-  }, null, 2);
+if (eventButton && eventOutput) {
+  eventButton.addEventListener("click", () => {
+    eventButton.disabled = true;
 
-  eventButton.disabled = false;
-});
-  // Incident Response Center
-const incidentForm = document.getElementById("incidentForm");
-const incidentList = document.getElementById("incidentList");
-const incidentCount = document.getElementById("incidentCount");
-const clearButton = document.getElementById("clearIncidents");
+    const events = [
+      ...Array.from({ length: 5 }, () => ({
+        eventType: "login_failed",
+        actorId: "lab-user-001"
+      })),
+      {
+        eventType: "login_success",
+        actorId: "lab-user-001"
+      },
+      ...Array.from({ length: 3 }, () => ({
+        eventType: "mfa_failed",
+        actorId: "lab-user-002"
+      }))
+    ];
+
+    const findings = [
+      {
+        type: "Repeated failed logins",
+        severity: "High",
+        evidence: "Five fictional failed login events",
+        recommendation: "Review authentication activity."
+      },
+      {
+        type: "Login success after repeated failures",
+        severity: "Critical",
+        evidence: "A fictional successful login followed five failures",
+        recommendation: "Verify the login using authorized audit records."
+      },
+      {
+        type: "Repeated MFA failures",
+        severity: "High",
+        evidence: "Three fictional MFA failures",
+        recommendation: "Review MFA alerts and verify the activity."
+      }
+    ];
+
+    eventOutput.textContent = JSON.stringify({
+      message: "Fictional event analysis completed",
+      analyzedEvents: events.length,
+      findingsCount: findings.length,
+      findings
+    }, null, 2);
+
+    eventButton.disabled = false;
+  });
+}
+
+// 3. INCIDENT RESPONSE CENTER
+
+const incidentForm = getElement("incidentForm");
+const incidentList = getElement("incidentList");
+const incidentCount = getElement("incidentCount");
+const clearButton = getElement("clearIncidents");
 
 const STORAGE_KEY = "bank_security_lab_incidents";
 
 function loadIncidents() {
   try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    const saved = JSON.parse(
+      localStorage.getItem(STORAGE_KEY) || "[]"
+    );
+
     return Array.isArray(saved) ? saved : [];
   } catch {
     return [];
@@ -575,277 +607,166 @@ function loadIncidents() {
 let incidents = loadIncidents();
 
 function saveIncidents() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(incidents));
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(incidents)
+  );
 }
 
 function makeElement(tag, className, text) {
   const element = document.createElement(tag);
-  if (className) element.className = className;
-  if (text !== undefined) element.textContent = text;
+
+  if (className) {
+    element.className = className;
+  }
+
+  if (text !== undefined) {
+    element.textContent = text;
+  }
+
   return element;
 }
 
-function renderIncidents() {
-  incidentList.replaceChildren();
-  incidentCount.textContent = incidents.length;
+// 4. ANALYTICS
 
-  renderAnalytics();
-  renderTimeline();
+function renderAnalytics() {
+  const summary = getElement("analyticsSummary");
+  const severityChart = getElement("severityChart");
+  const statusChart = getElement("statusChart");
 
-  if (incidents.length === 0) {
-    incidentList.appendChild(
-      makeElement("div", "empty", "No incidents recorded yet.")
-    );
-    return;
-  }
+  if (!summary || !severityChart || !statusChart) return;
 
-  incidents.forEach((incident) => {
-    const card = makeElement("article", "incident");
-
-    card.appendChild(makeElement("h3", "", incident.title));
-
-    const description = makeElement("p", "", incident.description);
-    card.appendChild(description);
-
-    const meta = makeElement(
-      "div",
-      "incident-meta",
-      "Severity: " + incident.severity +
-      "\nStatus: " + incident.status +
-      "\nCreated: " + incident.createdAt
-    );
-
-    meta.style.whiteSpace = "pre-line";
-    card.appendChild(meta);
-
-    const statusLabel = makeElement("label", "", "Update status");
-    const statusSelect = document.createElement("select");
-
-    ["Open", "Investigating", "Resolved"].forEach((status) => {
-      const option = document.createElement("option");
-      option.value = status;
-      option.textContent = status;
-      statusSelect.appendChild(option);
-    });
-
-    statusSelect.value = incident.status;
-
-    statusSelect.addEventListener("change", () => {
-      incident.status = statusSelect.value;
-      saveIncidents();
-      renderIncidents();
-    });
-
-    statusLabel.appendChild(statusSelect);
-    card.appendChild(statusLabel);
-
-    const deleteButton = makeElement("button", "delete", "Delete incident");
-
-    deleteButton.type = "button";
-    deleteButton.addEventListener("click", () => {
-      incidents = incidents.filter(item => item.id !== incident.id);
-      saveIncidents();
-      renderIncidents();
-    });
-
-    card.appendChild(deleteButton);
-    incidentList.appendChild(card);
-  });
-}
-
-incidentForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-
-  const title = document.getElementById("incidentTitle").value.trim();
-  const severity = document.getElementById("incidentSeverity").value;
-  const description = document.getElementById("incidentDescription").value.trim();
-
-  if (!title || !description) return;
-
-  incidents.unshift({
-    id: Date.now().toString() + Math.random().toString(16).slice(2),
-    title,
-    severity,
-    description,
-    status: "Open",
-    createdAt: new Date().toLocaleString(),
-    createdAtTimestamp: Date.now()
-  });
-
-  try {
-    saveIncidents();
-    incidentForm.reset();
-    renderIncidents();
-  } catch {
-    alert("Could not save the incident in this browser.");
-  }
-});
-
-clearButton.addEventListener("click", () => {
-  if (!confirm("Delete all locally stored fictional incidents?")) return;
-
-  incidents = [];
-  saveIncidents();
-  renderIncidents();
-});
-  // Incident Report Generator
-const reportButton = document.getElementById("generateReport");
-const reportPreview = document.getElementById("reportPreview");
-
-reportButton.addEventListener("click", () => {
-  const counts = {
+  const severities = {
     Low: 0,
     Medium: 0,
     High: 0,
     Critical: 0
   };
 
-  incidents.forEach(incident => {
-    if (Object.prototype.hasOwnProperty.call(counts, incident.severity)) {
-      counts[incident.severity]++;
+  const statuses = {
+    Open: 0,
+    Investigating: 0,
+    Resolved: 0
+  };
+
+  incidents.forEach((incident) => {
+    if (Object.prototype.hasOwnProperty.call(
+      severities, incident.severity
+    )) {
+      severities[incident.severity]++;
+    }
+
+    if (Object.prototype.hasOwnProperty.call(
+      statuses, incident.status
+    )) {
+      statuses[incident.status]++;
     }
   });
 
-  const lines = [
-    "BANK SECURITY LAB",
-    "INCIDENT RESPONSE REPORT",
-    "================================",
-    "",
-    "Generated: " + new Date().toLocaleString(),
-    "Total incidents: " + incidents.length,
-    "",
-    "SEVERITY SUMMARY",
-    "Low: " + counts.Low,
-    "Medium: " + counts.Medium,
-    "High: " + counts.High,
-    "Critical: " + counts.Critical,
-    "",
-    "INCIDENT DETAILS",
-    "================================"
-  ];
+  summary.textContent =
+    "Total incidents: " + incidents.length;
 
-  incidents.forEach((incident, index) => {
-    lines.push(
-      "",
-      "Incident #" + (index + 1),
-      "Title: " + incident.title,
-      "Description: " + incident.description,
-      "Severity: " + incident.severity,
-      "Status: " + incident.status,
-      "Created: " + incident.createdAt
+  function createChart(container, title, data) {
+    container.replaceChildren();
+
+    container.appendChild(
+      makeElement("h3", "", title)
     );
-  });
 
-  lines.push(
-    "",
-    "END OF REPORT",
-    "Fictional educational security laboratory."
-  );
+    Object.entries(data).forEach(([name, count]) => {
+      const row = makeElement("div", "chart-row");
 
-  const report = lines.join("\n");
-  reportPreview.textContent = report;
+      const label = makeElement(
+        "div",
+        "chart-label",
+        name + " (" + count + ")"
+      );
 
-  const blob = new Blob([report], {
-    type: "text/plain;charset=utf-8"
-  });
+      const bar = makeElement("div", "bar");
+      const fill = makeElement("div", "bar-fill");
 
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
+      const percentage = incidents.length
+        ? (count / incidents.length) * 100
+        : 0;
 
-  link.href = url;
-  link.download = "bank-security-incident-report.txt";
-  link.click();
+      fill.style.width = percentage + "%";
 
-  URL.revokeObjectURL(url);
-});
-const eventButton = document.getElementById("runEventTest");
-const eventOutput = document.getElementById("eventResults");
+      bar.appendChild(fill);
+      row.appendChild(label);
+      row.appendChild(bar);
+      container.appendChild(row);
+    });
+  }
 
-eventButton.addEventListener("click", () => {
-  eventButton.disabled = true;
+  createChart(severityChart, "Severity distribution", severities);
+  createChart(statusChart, "Incident status", statuses);
 
-  const events = [
-    ...Array.from({ length: 5 }, () => ({
-      eventType: "login_failed",
-      actorId: "lab-user-001"
-    })),
-    {
-      eventType: "login_success",
-      actorId: "lab-user-001"
-    },
-    ...Array.from({ length: 3 }, () => ({
-      eventType: "mfa_failed",
-      actorId: "lab-user-002"
-    }))
-  ];
+  const criticalCount = getElement("criticalCount");
+  const openCount = getElement("openCount");
 
-  const findings = [
-    {
-      type: "Repeated failed logins",
-      severity: "High",
-      evidence: "Five fictional failed login events",
-      recommendation: "Review authentication activity."
-    },
-    {
-      type: "Login success after repeated failures",
-      severity: "Critical",
-      evidence: "A fictional successful login followed five failures",
-      recommendation: "Verify the login using authorized audit records."
-    },
-    {
-      type: "Repeated MFA failures",
-      severity: "High",
-      evidence: "Three fictional MFA failures",
-      recommendation: "Review MFA alerts and verify the activity."
-    }
-  ];
+  if (criticalCount) {
+    criticalCount.textContent = severities.Critical;
+  }
 
-  eventOutput.textContent = JSON.stringify({
-    message: "Fictional event analysis preview completed",
-    analyzedEvents: events.length,
-    findingsCount: findings.length,
-    findings
-  }, null, 2);
-
-  eventButton.disabled = false;
-});
-
-// Incident Response Center
-const incidentForm = document.getElementById("incidentForm");
-const incidentList = document.getElementById("incidentList");
-const incidentCount = document.getElementById("incidentCount");
-const clearButton = document.getElementById("clearIncidents");
-
-const STORAGE_KEY = "bank_security_lab_incidents";
-
-function loadIncidents() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-    return Array.isArray(saved) ? saved : [];
-  } catch {
-    return [];
+  if (openCount) {
+    openCount.textContent = statuses.Open;
   }
 }
 
-let incidents = loadIncidents();
+// 5. INCIDENT TIMELINE
 
-function saveIncidents() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(incidents));
+function renderTimeline() {
+  const timeline = getElement("incidentTimeline");
+
+  if (!timeline) return;
+
+  timeline.replaceChildren();
+
+  if (!incidents.length) {
+    timeline.appendChild(
+      makeElement("div", "empty", "No timeline events recorded.")
+    );
+    return;
+  }
+
+  const sorted = [...incidents].sort(
+    (a, b) => (b.createdAtTimestamp || 0) -
+              (a.createdAtTimestamp || 0)
+  );
+
+  sorted.forEach((incident) => {
+    const item = makeElement("div", "timeline-item");
+
+    item.appendChild(
+      makeElement("strong", "", incident.title)
+    );
+
+    item.appendChild(
+      makeElement(
+        "small",
+        "",
+        incident.createdAt + " · " +
+        incident.severity + " · " +
+        incident.status
+      )
+    );
+
+    timeline.appendChild(item);
+  });
 }
 
-function makeElement(tag, className, text) {
-  const element = document.createElement(tag);
-  if (className) element.className = className;
-  if (text !== undefined) element.textContent = text;
-  return element;
-}
+// 6. INCIDENT LIST
 
 function renderIncidents() {
+  if (!incidentList || !incidentCount) return;
+
   incidentList.replaceChildren();
   incidentCount.textContent = incidents.length;
-renderAnalytics();
+
+  renderAnalytics();
   renderTimeline();
-  if (incidents.length === 0) {
+
+  if (!incidents.length) {
     incidentList.appendChild(
       makeElement("div", "empty", "No incidents recorded yet.")
     );
@@ -855,10 +776,13 @@ renderAnalytics();
   incidents.forEach((incident) => {
     const card = makeElement("article", "incident");
 
-    card.appendChild(makeElement("h3", "", incident.title));
+    card.appendChild(
+      makeElement("h3", "", incident.title)
+    );
 
-    const description = makeElement("p", "", incident.description);
-    card.appendChild(description);
+    card.appendChild(
+      makeElement("p", "", incident.description)
+    );
 
     const meta = makeElement(
       "div",
@@ -867,16 +791,23 @@ renderAnalytics();
       "\nStatus: " + incident.status +
       "\nCreated: " + incident.createdAt
     );
-    meta.style.whiteSpace = "pre-line";
+
     card.appendChild(meta);
 
-    const statusLabel = makeElement("label", "", "Update status");
+    const statusLabel = makeElement(
+      "label",
+      "",
+      "Update incident status"
+    );
+
     const statusSelect = document.createElement("select");
 
     ["Open", "Investigating", "Resolved"].forEach((status) => {
       const option = document.createElement("option");
+
       option.value = status;
       option.textContent = status;
+
       statusSelect.appendChild(option);
     });
 
@@ -894,12 +825,16 @@ renderAnalytics();
     const deleteButton = makeElement(
       "button",
       "delete",
-      "Delete incident"
+      "Delete Incident"
     );
 
     deleteButton.type = "button";
+
     deleteButton.addEventListener("click", () => {
-      incidents = incidents.filter(item => item.id !== incident.id);
+      incidents = incidents.filter(
+        (item) => item.id !== incident.id
+      );
+
       saveIncidents();
       renderIncidents();
     });
@@ -909,246 +844,193 @@ renderAnalytics();
   });
 }
 
-incidentForm.addEventListener("submit", (event) => {
-  event.preventDefault();
+if (incidentForm) {
+  incidentForm.addEventListener("submit", (event) => {
+    event.preventDefault();
 
-  const title = document.getElementById("incidentTitle").value.trim();
-  const severity = document.getElementById("incidentSeverity").value;
-  const description = document.getElementById("incidentDescription").value.trim();
+    const title = getElement("incidentTitle").value.trim();
+    const severity = getElement("incidentSeverity").value;
+    const description =
+      getElement("incidentDescription").value.trim();
 
-  if (!title || !description) return;
+    if (!title || !description) return;
 
- incidents.unshift({
-  id: Date.now().toString() + Math.random().toString(16).slice(2),
-  title,
-  severity,
-  description,
-  status: "Open",
-  createdAt: new Date().toLocaleString(),
-  createdAtTimestamp: Date.now()
-});
-
-  try {
-    saveIncidents();
-    incidentForm.reset();
-    renderIncidents();
-  } catch {
-    alert("Could not save the incident in this browser.");
-  }
-});
-
-clearButton.addEventListener("click", () => {
-  if (!confirm("Delete all locally stored fictional incidents?")) return;
-
-  incidents = [];
-  saveIncidents();
-  renderIncidents();
-});
-
-const reportButton = document.getElementById("generateReport");
-const reportPreview = document.getElementById("reportPreview");
-
-reportButton.addEventListener("click", () => {
-  const counts = {
-    Low: 0,
-    Medium: 0,
-    High: 0,
-    Critical: 0
-  };
-
-  incidents.forEach(incident => {
-    if (Object.prototype.hasOwnProperty.call(counts, incident.severity)) {
-      counts[incident.severity]++;
-    }
-  });
-
-  const lines = [
-    "BANK SECURITY LAB",
-    "INCIDENT RESPONSE REPORT",
-    "================================",
-    "",
-    "Generated: " + new Date().toLocaleString(),
-    "Total incidents: " + incidents.length,
-    "",
-    "SEVERITY SUMMARY",
-    "Low: " + counts.Low,
-    "Medium: " + counts.Medium,
-    "High: " + counts.High,
-    "Critical: " + counts.Critical,
-    "",
-    "INCIDENT DETAILS",
-    "================================"
-  ];
-
-  incidents.forEach((incident, index) => {
-    lines.push(
-      "",
-      "Incident #" + (index + 1),
-      "Title: " + incident.title,
-      "Description: " + incident.description,
-      "Severity: " + incident.severity,
-      "Status: " + incident.status,
-      "Created: " + incident.createdAt
-    );
-  });
-
-  lines.push(
-    "",
-    "END OF REPORT",
-    "Fictional educational security laboratory."
-  );
-
-  const report = lines.join("\n");
-
-  reportPreview.textContent = report;
-
-  const blob = new Blob([report], {
-    type: "text/plain;charset=utf-8"
-  });
-
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-
-  link.href = url;
-  link.download = "bank-security-incident-report.txt";
-  link.click();
-
-  URL.revokeObjectURL(url);
-});
-function renderAnalytics() {
-  const total = incidents.length;
-
-  const severities = ["Low", "Medium", "High", "Critical"];
-  const statuses = ["Open", "Investigating", "Resolved"];
-
-  const severityCounts = {};
-  const statusCounts = {};
-
-  severities.forEach(level => {
-    severityCounts[level] = incidents.filter(
-      item => item.severity === level
-    ).length;
-  });
-
-  statuses.forEach(status => {
-    statusCounts[status] = incidents.filter(
-      item => item.status === status
-    ).length;
-  });
-
-  const highCritical =
-    severityCounts.High + severityCounts.Critical;
-
-  document.getElementById("analyticsSummary").innerHTML = `
-    <p><strong>Total incidents:</strong> ${total}</p>
-    <p><strong>High and Critical:</strong> ${highCritical}</p>
-    <p><strong>Open:</strong> ${statusCounts.Open}</p>
-    <p><strong>Investigating:</strong> ${statusCounts.Investigating}</p>
-    <p><strong>Resolved:</strong> ${statusCounts.Resolved}</p>
-  `;
-
-  document.getElementById("severityChart").innerHTML =
-    severities.map(level => `
-      <p>${level}: ${severityCounts[level]}</p>
-      <div style="background:#263449;border-radius:8px;height:12px;margin-bottom:12px">
-        <div style="background:#27a6ed;width:${total ? severityCounts[level] / total * 100 : 0}%;height:12px;border-radius:8px"></div>
-      </div>
-    `).join("");
-
-  document.getElementById("statusChart").innerHTML =
-    statuses.map(status => `
-      <p>${status}: ${statusCounts[status]}</p>
-      <div style="background:#263449;border-radius:8px;height:12px;margin-bottom:12px">
-        <div style="background:#27a6ed;width:${total ? statusCounts[status] / total * 100 : 0}%;height:12px;border-radius:8px"></div>
-      </div>
-    `).join("");
-}
-
-document.getElementById("refreshAnalytics").addEventListener("click", renderAnalytics);
-  function renderTimeline() {
-  const timeline = document.getElementById("incidentTimeline");
-
-  if (!timeline) return;
-
-  if (incidents.length === 0) {
-    timeline.textContent = "No incident activity available.";
-    return;
-  }
-
-  const sortedIncidents = [...incidents].sort(
-  (a, b) => (b.createdAtTimestamp || 0) - (a.createdAtTimestamp || 0)
-);
-    
-
-  timeline.replaceChildren();
-
-  sortedIncidents.forEach(incident => {
-    const entry = document.createElement("div");
-    entry.style.padding = "12px";
-    entry.style.marginBottom = "12px";
-    entry.style.borderLeft = "3px solid #27a6ed";
-    entry.style.background = "#172438";
-    entry.style.borderRadius = "8px";
-
-    const title = document.createElement("strong");
-    title.textContent = incident.title;
-
-    const details = document.createElement("p");
-    details.textContent =
-      `Severity: ${incident.severity} | Status: ${incident.status}`;
-
-    const date = document.createElement("small");
-    date.textContent = `Created: ${incident.createdAt}`;
-
-    entry.append(title, details, date);
-    timeline.appendChild(entry);
-  });
-}
-
-document.getElementById("refreshTimeline").addEventListener(
-  "click",
-  renderTimeline
-);
-renderIncidents();
-  // Registration validation test
-const registrationButton =
-  document.getElementById("runRegistrationTest");
-
-const registrationOutput =
-  document.getElementById("registrationResults");
-
-registrationButton.addEventListener("click", async () => {
-  registrationButton.disabled = true;
-  registrationOutput.textContent = "Testing registration validation...";
-
-  try {
-    const response = await fetch("/api/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        name: "Test User",
-        email: "not-an-email",
-        password: "FakeTestPassword123!"
-      })
+    incidents.unshift({
+      id: Date.now().toString() +
+        Math.random().toString(16).slice(2),
+      title,
+      severity,
+      description,
+      status: "Open",
+      createdAt: new Date().toLocaleString(),
+      createdAtTimestamp: Date.now()
     });
 
-    const data = await response.json();
+    try {
+      saveIncidents();
+      incidentForm.reset();
+      renderIncidents();
+    } catch {
+      alert("Could not save the incident in this browser.");
+    }
+  });
+}
+
+if (clearButton) {
+  clearButton.addEventListener("click", () => {
+    if (!confirm("Delete all locally stored fictional incidents?")) {
+      return;
+    }
+
+    incidents = [];
+
+    try {
+      saveIncidents();
+      renderIncidents();
+    } catch {
+      alert("Could not clear the incident records.");
+    }
+  });
+}
+
+// 7. INCIDENT REPORT GENERATOR
+
+const reportButton = getElement("generateReport");
+const reportPreview = getElement("reportPreview");
+
+if (reportButton && reportPreview) {
+  reportButton.addEventListener("click", () => {
+    const counts = {
+      Low: 0,
+      Medium: 0,
+      High: 0,
+      Critical: 0
+    };
+
+    incidents.forEach((incident) => {
+      if (Object.prototype.hasOwnProperty.call(
+        counts, incident.severity
+      )) {
+        counts[incident.severity]++;
+      }
+    });
+
+    const lines = [
+      "BANK SECURITY LAB",
+      "INCIDENT RESPONSE REPORT",
+      "================================",
+      "",
+      "Generated: " + new Date().toLocaleString(),
+      "Total incidents: " + incidents.length,
+      "",
+      "SEVERITY SUMMARY",
+      "Low: " + counts.Low,
+      "Medium: " + counts.Medium,
+      "High: " + counts.High,
+      "Critical: " + counts.Critical,
+      "",
+      "INCIDENT DETAILS",
+      "================================"
+    ];
+
+    incidents.forEach((incident, index) => {
+      lines.push(
+        "",
+        "Incident #" + (index + 1),
+        "Title: " + incident.title,
+        "Description: " + incident.description,
+        "Severity: " + incident.severity,
+        "Status: " + incident.status,
+        "Created: " + incident.createdAt
+      );
+    });
+
+    lines.push(
+      "",
+      "END OF REPORT",
+      "Fictional educational security laboratory."
+    );
+
+    const report = lines.join("\n");
+
+    reportPreview.textContent = report;
+
+    const blob = new Blob([report], {
+      type: "text/plain;charset=utf-8"
+    });
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = "bank-security-incident-report.txt";
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+}
+
+// 8. REFRESH CONTROLS
+
+const refreshAnalytics = getElement("refreshAnalytics");
+const refreshTimeline = getElement("refreshTimeline");
+
+if (refreshAnalytics) {
+  refreshAnalytics.addEventListener("click", renderAnalytics);
+}
+
+if (refreshTimeline) {
+  refreshTimeline.addEventListener("click", renderTimeline);
+}
+
+// 9. LOCAL REGISTRATION VALIDATION DEMONSTRATION
+
+const registrationButton = getElement("runRegistrationTest");
+const registrationOutput = getElement("registrationResults");
+
+if (registrationButton && registrationOutput) {
+  registrationButton.addEventListener("click", () => {
+    const testData = {
+      name: "Test User",
+      email: "not-an-email",
+      password: "FakeTestPassword123!"
+    };
+
+    const errors = [];
+
+    if (testData.name.trim().length < 2) {
+      errors.push("Name must contain at least two characters.");
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(testData.email)) {
+      errors.push("Email format is invalid.");
+    }
+
+    if (testData.password.length < 8) {
+      errors.push("Password must contain at least eight characters.");
+    }
 
     registrationOutput.textContent = JSON.stringify({
-      httpStatus: response.status,
-      result: data
+      message: "Local validation demonstration completed",
+      testData: {
+        name: testData.name,
+        email: testData.email,
+        password: "[FICTIONAL TEST VALUE]"
+      },
+      valid: errors.length === 0,
+      errors,
+      serverRequestSent: false
     }, null, 2);
+  });
+}
 
-  } catch (error) {
-    registrationOutput.textContent =
-      "Test failed: " + error.message;
-  } finally {
-    registrationButton.disabled = false;
-  }
-});
+// INITIALIZE DASHBOARD
+
+renderIncidents();
+
 </script>
-
 </body>
 </html>
