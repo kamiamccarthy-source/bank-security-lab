@@ -580,7 +580,56 @@ reportButton.addEventListener("click", () => {
 
   URL.revokeObjectURL(url);
 });
+function renderAnalytics() {
+  const total = incidents.length;
 
+  const severities = ["Low", "Medium", "High", "Critical"];
+  const statuses = ["Open", "Investigating", "Resolved"];
+
+  const severityCounts = {};
+  const statusCounts = {};
+
+  severities.forEach(level => {
+    severityCounts[level] = incidents.filter(
+      item => item.severity === level
+    ).length;
+  });
+
+  statuses.forEach(status => {
+    statusCounts[status] = incidents.filter(
+      item => item.status === status
+    ).length;
+  });
+
+  const highCritical =
+    severityCounts.High + severityCounts.Critical;
+
+  document.getElementById("analyticsSummary").innerHTML = `
+    <p><strong>Total incidents:</strong> ${total}</p>
+    <p><strong>High and Critical:</strong> ${highCritical}</p>
+    <p><strong>Open:</strong> ${statusCounts.Open}</p>
+    <p><strong>Investigating:</strong> ${statusCounts.Investigating}</p>
+    <p><strong>Resolved:</strong> ${statusCounts.Resolved}</p>
+  `;
+
+  document.getElementById("severityChart").innerHTML =
+    severities.map(level => `
+      <p>${level}: ${severityCounts[level]}</p>
+      <div style="background:#263449;border-radius:8px;height:12px;margin-bottom:12px">
+        <div style="background:#27a6ed;width:${total ? severityCounts[level] / total * 100 : 0}%;height:12px;border-radius:8px"></div>
+      </div>
+    `).join("");
+
+  document.getElementById("statusChart").innerHTML =
+    statuses.map(status => `
+      <p>${status}: ${statusCounts[status]}</p>
+      <div style="background:#263449;border-radius:8px;height:12px;margin-bottom:12px">
+        <div style="background:#27a6ed;width:${total ? statusCounts[status] / total * 100 : 0}%;height:12px;border-radius:8px"></div>
+      </div>
+    `).join("");
+}
+
+document.getElementById("refreshAnalytics").addEventListener("click", renderAnalytics);
 renderIncidents();
 </script>
 
