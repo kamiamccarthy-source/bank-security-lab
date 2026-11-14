@@ -28,6 +28,15 @@ app.use(helmet({
     }
   }
 }));
+
+app.use((req, res, next) => {
+  res.setHeader(
+    "Permissions-Policy",
+    "camera=(), microphone=(), geolocation=()"
+  );
+  next();
+});
+
 const scrypt = promisify(crypto.scrypt);
 
 app.use(express.json({ limit: "10kb" }));
