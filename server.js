@@ -7,7 +7,7 @@ const app = express();
 const scrypt = promisify(crypto.scrypt);
 
 app.use(express.json({ limit: "10kb" }));
-
+app.use(express.static("public"));
 const PORT = process.env.PORT || 3000;
 const SECRET = process.env.SESSION_SECRET;
 
