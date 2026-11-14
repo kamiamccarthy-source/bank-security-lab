@@ -4,65 +4,115 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bank Security Lab | Credential Monitor</title>
+  <title>Bank Security Lab | Security Center</title>
   <style>
+    * { box-sizing: border-box; }
+
     body {
       margin: 0;
-      padding: 24px;
+      padding: 20px;
       background: #0b1425;
       color: #f1f5f9;
       font-family: Arial, sans-serif;
     }
+
     main {
-      max-width: 700px;
-      margin: 40px auto;
+      max-width: 850px;
+      margin: 30px auto;
     }
+
     .panel {
       background: #17243a;
       padding: 22px;
       border-radius: 14px;
       margin: 18px 0;
+      border: 1px solid #293c58;
     }
+
     button {
       background: #2878e8;
       color: white;
       border: 0;
-      padding: 14px 20px;
+      padding: 13px 18px;
       border-radius: 8px;
-      font-size: 16px;
+      font-size: 15px;
       cursor: pointer;
     }
+
+    button:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
     pre {
       white-space: pre-wrap;
       overflow-wrap: anywhere;
       color: #a9d5ff;
+      font-size: 13px;
     }
+
     .muted { color: #aab8cc; }
+
+    .status {
+      color: #55d6a3;
+      font-weight: bold;
+    }
+
+    .warning {
+      color: #ffc46b;
+    }
+
+    h1 { color: #70b5ff; }
   </style>
 </head>
+
 <body>
 <main>
   <h1>Bank Security Lab</h1>
-  <p class="muted">Credential Security Monitor</p>
+  <p class="muted">Security Monitoring Center</p>
 
   <section class="panel">
-    <h2>Fictional security demonstration</h2>
+    <h2>1. Credential Security Monitor</h2>
     <p>
-      Test detection of simulated password, PIN, OTP
-      and token exposure indicators.
+      Demonstrates detection of simulated password,
+      PIN, OTP and access-token exposure indicators.
     </p>
     <p class="muted">
-      No real credentials are requested or collected.
+      Uses fictional examples only. No real credentials
+      are requested or collected.
     </p>
-    <button id="runTest">Run fictional test</button>
+
+    <button id="runTest">Run fictional credential test</button>
+    <pre id="results">No test has been run.</pre>
   </section>
 
   <section class="panel">
-    <h2>Test results</h2>
-    <pre id="results">No test has been run.</pre>
+    <h2>2. Security Event Analyzer</h2>
+    <p>
+      Demonstrates rule-based analysis of fictional
+      authentication events.
+    </p>
+
+    <p class="muted">
+      Preview only. Actual server-side analysis requires
+      authenticated access to the protected API.
+    </p>
+
+    <button id="runEventTest">Analyze fictional events</button>
+    <pre id="eventResults">No event analysis has been run.</pre>
+  </section>
+
+  <section class="panel">
+    <h2>System information</h2>
+    <p class="status">Dashboard loaded</p>
+    <p class="muted">
+      Environment: Educational security laboratory
+    </p>
+    <p class="muted">
+      Data mode: Fictional demonstration
+    </p>
   </section>
 </main>
-
 
 <script>
 const button = document.getElementById("runTest");
@@ -70,7 +120,6 @@ const output = document.getElementById("results");
 
 button.addEventListener("click", () => {
   button.disabled = true;
-  output.textContent = "Running fictional security test...";
 
   const results = [
     {
@@ -100,12 +149,64 @@ button.addEventListener("click", () => {
   ];
 
   output.textContent = JSON.stringify({
-    message: "Fictional security demonstration completed",
+    message: "Fictional demonstration completed",
     totalFindings: results.length,
     results
   }, null, 2);
 
   button.disabled = false;
+});
+
+const eventButton = document.getElementById("runEventTest");
+const eventOutput = document.getElementById("eventResults");
+
+eventButton.addEventListener("click", () => {
+  eventButton.disabled = true;
+
+  const events = [
+    ...Array.from({ length: 5 }, () => ({
+      eventType: "login_failed",
+      actorId: "lab-user-001"
+    })),
+    {
+      eventType: "login_success",
+      actorId: "lab-user-001"
+    },
+    ...Array.from({ length: 3 }, () => ({
+      eventType: "mfa_failed",
+      actorId: "lab-user-002"
+    }))
+  ];
+
+  const findings = [
+    {
+      type: "Repeated failed logins",
+      severity: "High",
+      evidence: "Five fictional failed login events",
+      recommendation: "Review authentication activity."
+    },
+    {
+      type: "Login success after repeated failures",
+      severity: "Critical",
+      evidence: "A fictional successful login followed five failures",
+      recommendation: "Verify the login using authorized audit records."
+    },
+    {
+      type: "Repeated MFA failures",
+      severity: "High",
+      evidence: "Three fictional MFA failures",
+      recommendation: "Review MFA alerts and verify the activity."
+    }
+  ];
+
+  eventOutput.textContent = JSON.stringify({
+    message: "Fictional event analysis preview completed",
+    analyzedEvents: events.length,
+    findingsCount: findings.length,
+    findings
+  }, null, 2);
+
+  eventButton.disabled = false;
 });
 </script>
 
