@@ -237,9 +237,9 @@ hr {
     margin: 5px 0;
   }
 }
-
-  <style>
+</style>
 </head>
+ 
 
 <body>
 <main>
@@ -454,15 +454,22 @@ No registration test has been run.
 <p class="muted">Last Dashboard Load: <span id="systemLoadTime"></span></p>
   </section>
 </main>
+
+<script>
+const button = document.getElementById("runTest");
+
+// Keep all your existing JavaScript here.
+
+// Timestamp code goes at the bottom:
 const loadTime = document.getElementById("systemLoadTime");
 
 if (loadTime) {
   loadTime.textContent = new Date().toLocaleString();
 }
-<script>
-const button = document.getElementById("runTest");
-const output = document.getElementById("results");
+</script>
 
+</body>
+</html>
 button.addEventListener("click", () => {
   button.disabled = true;
 
