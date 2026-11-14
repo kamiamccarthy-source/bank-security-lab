@@ -285,6 +285,40 @@
   </button>
 </section>
   <section class="panel">
+  <h2>7. Registration Validation Test</h2>
+
+  <p>
+    Test whether the lab registration endpoint correctly
+    rejects invalid registration information.
+  </p>
+
+  <div class="notice">
+    Fictional test data only. Never enter real passwords,
+    PINs, OTPs or personal information.
+  </div>
+
+  <label for="testName">Fictional name</label>
+  <input id="testName" value="Test User">
+
+  <label for="testEmail">Test email</label>
+  <input id="testEmail" value="not-an-email">
+
+  <label for="testPassword">Fictional test password</label>
+  <input
+    id="testPassword"
+    type="password"
+    value="FakeTestPassword123!"
+  >
+
+  <button id="runRegistrationTest" type="button">
+    Test registration validation
+  </button>
+
+  <pre id="registrationResults">
+No registration test has been run.
+  </pre>
+</section>
+  <section class="panel">
     <h2>System information</h2>
     <p class="status">Dashboard loaded</p>
     <p class="muted">
