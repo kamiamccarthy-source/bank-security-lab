@@ -1,9 +1,33 @@
 const securityAnalyzer = require("./security-event-analyzer");
 const express = require("express");
+const helmet = require("helmet");
 const crypto = require("crypto");
 const { promisify } = require("util");
 const credentialMonitor = require("./credential-monitor");
 const app = express();
+app.disable("x-powered-by");
+
+app.use(helmet({
+  contentSecurityPolicy: false,
+  strictTransportSecurity: {
+    maxAge: 31536000,
+    includeSubDomains: false
+  },
+  frameguard: {
+    action: "sameorigin"
+  },
+  noSniff: true,
+  referrerPolicy: {
+    policy: "strict-origin-when-cross-origin"
+  },
+  permissionsPolicy: {
+    features: {
+      camera: [],
+      microphone: [],
+      geolocation: []
+    }
+  }
+}));
 const scrypt = promisify(crypto.scrypt);
 
 app.use(express.json({ limit: "10kb" }));
