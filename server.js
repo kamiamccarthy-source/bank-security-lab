@@ -1,4 +1,4 @@
-
+const securityAnalyzer = require("./security-event-analyzer");
 const express = require("express");
 const crypto = require("crypto");
 const { promisify } = require("util");
@@ -312,6 +312,46 @@ app.get(
     res.json({
       reports: credentialMonitor.getReports()
     });
+  }
+);
+// Authenticated fictional security-event analysis
+app.post(
+  "/api/security/events/demo",
+  authenticate,
+  (req, res) => {
+    try {
+      const now = Date.now();
+
+      const demoEvents = [
+        ...Array.from({ length: 5 }, (_, i) => ({
+          actorId: "lab-user-001",
+          eventType: "login_failed",
+          timestamp: new Date(now - (5 - i) * 60000).toISOString()
+        })),
+        {
+          actorId: "lab-user-001",
+          eventType: "login_success",
+          timestamp: new Date(now).toISOString()
+        },
+        ...Array.from({ length: 3 }, (_, i) => ({
+          actorId: "lab-user-002",
+          eventType: "mfa_failed",
+          timestamp: new Date(now - i * 30000).toISOString()
+        }))
+      ];
+
+      const report =
+        securityAnalyzer.analyzeEvents(demoEvents);
+
+      res.json({
+        message: "Fictional security-event analysis completed",
+        report
+      });
+    } catch {
+      res.status(500).json({
+        error: "Security analysis failed"
+      });
+    }
   }
 );
 // Start server
