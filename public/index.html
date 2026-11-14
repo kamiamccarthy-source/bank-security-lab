@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bank Security Lab | Credential Monitor</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 24px;
+      background: #0b1425;
+      color: #f1f5f9;
+      font-family: Arial, sans-serif;
+    }
+    main {
+      max-width: 700px;
+      margin: 40px auto;
+    }
+    .panel {
+      background: #17243a;
+      padding: 22px;
+      border-radius: 14px;
+      margin: 18px 0;
+    }
+    button {
+      background: #2878e8;
+      color: white;
+      border: 0;
+      padding: 14px 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    pre {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      color: #a9d5ff;
+    }
+    .muted { color: #aab8cc; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Bank Security Lab</h1>
+  <p class="muted">Credential Security Monitor</p>
+
+  <section class="panel">
+    <h2>Fictional security demonstration</h2>
+    <p>
+      Test detection of simulated password, PIN, OTP
+      and token exposure indicators.
+    </p>
+    <p class="muted">
+      No real credentials are requested or collected.
+    </p>
+    <button id="runTest">Run fictional test</button>
+  </section>
+
+  <section class="panel">
+    <h2>Test results</h2>
+    <pre id="results">No test has been run.</pre>
+  </section>
+</main>
+
+<script>
+const button = document.getElementById("runTest");
+const output = document.getElementById("results");
+
+button.addEventListener("click", async () => {
+  button.disabled = true;
+  output.textContent = "Running fictional security test...";
+
+  try {
+    const response = await fetch(
+      "/api/security/credential-monitor/demo",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: "{}"
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Test request failed");
+    }
+
+    output.textContent = JSON.stringify(data, null, 2);
+  } catch (error) {
+    output.textContent = "Test could not run: " + error.message;
+  } finally {
+    button.disabled = false;
+  }
+});
+</script>
+</body>
+</html>
