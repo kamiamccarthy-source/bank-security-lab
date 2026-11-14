@@ -725,6 +725,44 @@ document.getElementById("refreshTimeline").addEventListener(
   renderTimeline
 );
 renderIncidents();
+  // Registration validation test
+const registrationButton =
+  document.getElementById("runRegistrationTest");
+
+const registrationOutput =
+  document.getElementById("registrationResults");
+
+registrationButton.addEventListener("click", async () => {
+  registrationButton.disabled = true;
+  registrationOutput.textContent = "Testing registration validation...";
+
+  try {
+    const response = await fetch("/api/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name: "Test User",
+        email: "not-an-email",
+        password: "FakeTestPassword123!"
+      })
+    });
+
+    const data = await response.json();
+
+    registrationOutput.textContent = JSON.stringify({
+      httpStatus: response.status,
+      result: data
+    }, null, 2);
+
+  } catch (error) {
+    registrationOutput.textContent =
+      "Test failed: " + error.message;
+  } finally {
+    registrationButton.disabled = false;
+  }
+});
 </script>
 
 </body>
