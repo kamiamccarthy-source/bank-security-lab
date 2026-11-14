@@ -458,22 +458,13 @@ No registration test has been run.
 const button = document.getElementById("runTest");
 const output = document.getElementById("results");
 
-// Paste your complete existing JavaScript here,
-// starting with:
-// button.addEventListener("click", () => {
 
-// Keep every existing function and event listener.
-
-// At the very end, immediately before </script>:
 const loadTime = document.getElementById("systemLoadTime");
 
 if (loadTime) {
   loadTime.textContent = new Date().toLocaleString();
 }
-</script>
 
-</body>
-</html>
 
 button.addEventListener("click", () => {
   button.disabled = true;
@@ -513,7 +504,260 @@ button.addEventListener("click", () => {
 
   button.disabled = false;
 });
+const eventButton = document.getElementById("runEventTest");
+const eventOutput = document.getElementById("eventResults");
 
+eventButton.addEventListener("click", () => {
+  eventButton.disabled = true;
+
+  const events = [
+    ...Array.from({ length: 5 }, () => ({
+      eventType: "login_failed",
+      actorId: "lab-user-001"
+    })),
+    {
+      eventType: "login_success",
+      actorId: "lab-user-001"
+    },
+    ...Array.from({ length: 3 }, () => ({
+      eventType: "mfa_failed",
+      actorId: "lab-user-002"
+    }))
+  ];
+
+  const findings = [
+    {
+      type: "Repeated failed logins",
+      severity: "High",
+      evidence: "Five fictional failed login events",
+      recommendation: "Review authentication activity."
+    },
+    {
+      type: "Login success after repeated failures",
+      severity: "Critical",
+      evidence: "A fictional successful login followed five failures",
+      recommendation: "Verify the login using authorized audit records."
+    },
+    {
+      type: "Repeated MFA failures",
+      severity: "High",
+      evidence: "Three fictional MFA failures",
+      recommendation: "Review MFA alerts and verify the activity."
+    }
+  ];
+
+  eventOutput.textContent = JSON.stringify({
+    message: "Fictional event analysis preview completed",
+    analyzedEvents: events.length,
+    findingsCount: findings.length,
+    findings
+  }, null, 2);
+
+  eventButton.disabled = false;
+});
+  // Incident Response Center
+const incidentForm = document.getElementById("incidentForm");
+const incidentList = document.getElementById("incidentList");
+const incidentCount = document.getElementById("incidentCount");
+const clearButton = document.getElementById("clearIncidents");
+
+const STORAGE_KEY = "bank_security_lab_incidents";
+
+function loadIncidents() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    return Array.isArray(saved) ? saved : [];
+  } catch {
+    return [];
+  }
+}
+
+let incidents = loadIncidents();
+
+function saveIncidents() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(incidents));
+}
+
+function makeElement(tag, className, text) {
+  const element = document.createElement(tag);
+  if (className) element.className = className;
+  if (text !== undefined) element.textContent = text;
+  return element;
+}
+
+function renderIncidents() {
+  incidentList.replaceChildren();
+  incidentCount.textContent = incidents.length;
+
+  renderAnalytics();
+  renderTimeline();
+
+  if (incidents.length === 0) {
+    incidentList.appendChild(
+      makeElement("div", "empty", "No incidents recorded yet.")
+    );
+    return;
+  }
+
+  incidents.forEach((incident) => {
+    const card = makeElement("article", "incident");
+
+    card.appendChild(makeElement("h3", "", incident.title));
+
+    const description = makeElement("p", "", incident.description);
+    card.appendChild(description);
+
+    const meta = makeElement(
+      "div",
+      "incident-meta",
+      "Severity: " + incident.severity +
+      "\nStatus: " + incident.status +
+      "\nCreated: " + incident.createdAt
+    );
+
+    meta.style.whiteSpace = "pre-line";
+    card.appendChild(meta);
+
+    const statusLabel = makeElement("label", "", "Update status");
+    const statusSelect = document.createElement("select");
+
+    ["Open", "Investigating", "Resolved"].forEach((status) => {
+      const option = document.createElement("option");
+      option.value = status;
+      option.textContent = status;
+      statusSelect.appendChild(option);
+    });
+
+    statusSelect.value = incident.status;
+
+    statusSelect.addEventListener("change", () => {
+      incident.status = statusSelect.value;
+      saveIncidents();
+      renderIncidents();
+    });
+
+    statusLabel.appendChild(statusSelect);
+    card.appendChild(statusLabel);
+
+    const deleteButton = makeElement("button", "delete", "Delete incident");
+
+    deleteButton.type = "button";
+    deleteButton.addEventListener("click", () => {
+      incidents = incidents.filter(item => item.id !== incident.id);
+      saveIncidents();
+      renderIncidents();
+    });
+
+    card.appendChild(deleteButton);
+    incidentList.appendChild(card);
+  });
+}
+
+incidentForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const title = document.getElementById("incidentTitle").value.trim();
+  const severity = document.getElementById("incidentSeverity").value;
+  const description = document.getElementById("incidentDescription").value.trim();
+
+  if (!title || !description) return;
+
+  incidents.unshift({
+    id: Date.now().toString() + Math.random().toString(16).slice(2),
+    title,
+    severity,
+    description,
+    status: "Open",
+    createdAt: new Date().toLocaleString(),
+    createdAtTimestamp: Date.now()
+  });
+
+  try {
+    saveIncidents();
+    incidentForm.reset();
+    renderIncidents();
+  } catch {
+    alert("Could not save the incident in this browser.");
+  }
+});
+
+clearButton.addEventListener("click", () => {
+  if (!confirm("Delete all locally stored fictional incidents?")) return;
+
+  incidents = [];
+  saveIncidents();
+  renderIncidents();
+});
+  // Incident Report Generator
+const reportButton = document.getElementById("generateReport");
+const reportPreview = document.getElementById("reportPreview");
+
+reportButton.addEventListener("click", () => {
+  const counts = {
+    Low: 0,
+    Medium: 0,
+    High: 0,
+    Critical: 0
+  };
+
+  incidents.forEach(incident => {
+    if (Object.prototype.hasOwnProperty.call(counts, incident.severity)) {
+      counts[incident.severity]++;
+    }
+  });
+
+  const lines = [
+    "BANK SECURITY LAB",
+    "INCIDENT RESPONSE REPORT",
+    "================================",
+    "",
+    "Generated: " + new Date().toLocaleString(),
+    "Total incidents: " + incidents.length,
+    "",
+    "SEVERITY SUMMARY",
+    "Low: " + counts.Low,
+    "Medium: " + counts.Medium,
+    "High: " + counts.High,
+    "Critical: " + counts.Critical,
+    "",
+    "INCIDENT DETAILS",
+    "================================"
+  ];
+
+  incidents.forEach((incident, index) => {
+    lines.push(
+      "",
+      "Incident #" + (index + 1),
+      "Title: " + incident.title,
+      "Description: " + incident.description,
+      "Severity: " + incident.severity,
+      "Status: " + incident.status,
+      "Created: " + incident.createdAt
+    );
+  });
+
+  lines.push(
+    "",
+    "END OF REPORT",
+    "Fictional educational security laboratory."
+  );
+
+  const report = lines.join("\n");
+  reportPreview.textContent = report;
+
+  const blob = new Blob([report], {
+    type: "text/plain;charset=utf-8"
+  });
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = "bank-security-incident-report.txt";
+  link.click();
+
+  URL.revokeObjectURL(url);
+});
 const eventButton = document.getElementById("runEventTest");
 const eventOutput = document.getElementById("eventResults");
 
