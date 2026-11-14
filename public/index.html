@@ -499,14 +499,15 @@ incidentForm.addEventListener("submit", (event) => {
 
   if (!title || !description) return;
 
-  incidents.unshift({
-    id: Date.now().toString() + Math.random().toString(16).slice(2),
-    title,
-    severity,
-    description,
-    status: "Open",
-    createdAt: new Date().toLocaleString()
-  });
+ incidents.unshift({
+  id: Date.now().toString() + Math.random().toString(16).slice(2),
+  title,
+  severity,
+  description,
+  status: "Open",
+  createdAt: new Date().toLocaleString(),
+  createdAtTimestamp: Date.now()
+});
 
   try {
     saveIncidents();
