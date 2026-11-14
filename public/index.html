@@ -657,6 +657,8 @@ document.getElementById("refreshAnalytics").addEventListener("click", renderAnal
   }
 
   const sortedIncidents = [...incidents].sort(
+  (a, b) => (b.createdAtTimestamp || 0) - (a.createdAtTimestamp || 0)
+);
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
   );
 
