@@ -228,6 +228,26 @@
     </p>
   </section>
 
+<section class="panel">
+  <h2>4. Incident Report Generator</h2>
+
+  <p>
+    Generate a downloadable report of fictional
+    security incidents recorded in this browser.
+  </p>
+
+  <div class="notice">
+    Reports contain only locally recorded fictional
+    or sanitized incident information.
+  </div>
+
+  <button id="generateReport">
+    Generate incident report
+  </button>
+
+  <pre id="reportPreview">No report generated yet.</pre>
+</section>
+
   <section class="panel">
     <h2>System information</h2>
     <p class="status">Dashboard loaded</p>
@@ -466,6 +486,77 @@ clearButton.addEventListener("click", () => {
   incidents = [];
   saveIncidents();
   renderIncidents();
+});
+
+const reportButton = document.getElementById("generateReport");
+const reportPreview = document.getElementById("reportPreview");
+
+reportButton.addEventListener("click", () => {
+  const counts = {
+    Low: 0,
+    Medium: 0,
+    High: 0,
+    Critical: 0
+  };
+
+  incidents.forEach(incident => {
+    if (Object.prototype.hasOwnProperty.call(counts, incident.severity)) {
+      counts[incident.severity]++;
+    }
+  });
+
+  const lines = [
+    "BANK SECURITY LAB",
+    "INCIDENT RESPONSE REPORT",
+    "================================",
+    "",
+    "Generated: " + new Date().toLocaleString(),
+    "Total incidents: " + incidents.length,
+    "",
+    "SEVERITY SUMMARY",
+    "Low: " + counts.Low,
+    "Medium: " + counts.Medium,
+    "High: " + counts.High,
+    "Critical: " + counts.Critical,
+    "",
+    "INCIDENT DETAILS",
+    "================================"
+  ];
+
+  incidents.forEach((incident, index) => {
+    lines.push(
+      "",
+      "Incident #" + (index + 1),
+      "Title: " + incident.title,
+      "Description: " + incident.description,
+      "Severity: " + incident.severity,
+      "Status: " + incident.status,
+      "Created: " + incident.createdAt
+    );
+  });
+
+  lines.push(
+    "",
+    "END OF REPORT",
+    "Fictional educational security laboratory."
+  );
+
+  const report = lines.join("\n");
+
+  reportPreview.textContent = report;
+
+  const blob = new Blob([report], {
+    type: "text/plain;charset=utf-8"
+  });
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = "bank-security-incident-report.txt";
+  link.click();
+
+  URL.revokeObjectURL(url);
 });
 
 renderIncidents();
