@@ -7,8 +7,22 @@ const credentialMonitor = require("./credential-monitor");
 const app = express();
 app.disable("x-powered-by");
 
+
 app.use(helmet({
-  contentSecurityPolicy: false,
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", "data:", "https:"],
+      connectSrc: ["'self'"],
+      objectSrc: ["'none'"],
+      baseUri: ["'self'"],
+      frameAncestors: ["'self'"],
+      formAction: ["'self'"],
+      upgradeInsecureRequests: []
+    }
+  },
   strictTransportSecurity: {
     maxAge: 31536000,
     includeSubDomains: false
@@ -19,13 +33,6 @@ app.use(helmet({
   noSniff: true,
   referrerPolicy: {
     policy: "strict-origin-when-cross-origin"
-  },
-  permissionsPolicy: {
-    features: {
-      camera: [],
-      microphone: [],
-      geolocation: []
-    }
   }
 }));
 
