@@ -454,8 +454,11 @@ No registration test has been run.
 <p class="muted">Last Dashboard Load: <span id="systemLoadTime"></span></p>
   </section>
 </main>
-document.getElementById("systemLoadTime").textContent =
-  new Date().toLocaleString();
+const loadTime = document.getElementById("systemLoadTime");
+
+if (loadTime) {
+  loadTime.textContent = new Date().toLocaleString();
+}
 <script>
 const button = document.getElementById("runTest");
 const output = document.getElementById("results");
