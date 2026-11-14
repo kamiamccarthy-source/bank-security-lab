@@ -63,39 +63,51 @@
   </section>
 </main>
 
+
 <script>
 const button = document.getElementById("runTest");
 const output = document.getElementById("results");
 
-button.addEventListener("click", async () => {
+button.addEventListener("click", () => {
   button.disabled = true;
   output.textContent = "Running fictional security test...";
 
-  try {
-    const response = await fetch(
-      "/api/security/credential-monitor/demo",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: "{}"
-      }
-    );
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.error || "Test request failed");
+  const results = [
+    {
+      category: "Password",
+      status: "DETECTED",
+      risk: "High",
+      detail: "Fictional password exposure indicator"
+    },
+    {
+      category: "PIN",
+      status: "DETECTED",
+      risk: "High",
+      detail: "Fictional PIN exposure indicator"
+    },
+    {
+      category: "OTP",
+      status: "DETECTED",
+      risk: "High",
+      detail: "Fictional OTP exposure indicator"
+    },
+    {
+      category: "Access token",
+      status: "DETECTED",
+      risk: "High",
+      detail: "Fictional token exposure indicator"
     }
+  ];
 
-    output.textContent = JSON.stringify(data, null, 2);
-  } catch (error) {
-    output.textContent = "Test could not run: " + error.message;
-  } finally {
-    button.disabled = false;
-  }
+  output.textContent = JSON.stringify({
+    message: "Fictional security demonstration completed",
+    totalFindings: results.length,
+    results
+  }, null, 2);
+
+  button.disabled = false;
 });
 </script>
+
 </body>
 </html>
