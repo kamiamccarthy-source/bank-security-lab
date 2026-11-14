@@ -269,7 +269,21 @@
     Refresh analytics
   </button>
 </section>
+<section class="panel">
+  <h2>6. Incident Activity Timeline</h2>
 
+  <p class="muted">
+    Chronological view of locally recorded fictional incidents.
+  </p>
+
+  <div id="incidentTimeline">
+    No incident activity available.
+  </div>
+
+  <button id="refreshTimeline" type="button">
+    Refresh timeline
+  </button>
+</section>
   <section class="panel">
     <h2>System information</h2>
     <p class="status">Dashboard loaded</p>
@@ -411,6 +425,7 @@ function renderIncidents() {
   incidentList.replaceChildren();
   incidentCount.textContent = incidents.length;
 renderAnalytics();
+  renderTimeline();
   if (incidents.length === 0) {
     incidentList.appendChild(
       makeElement("div", "empty", "No incidents recorded yet.")
@@ -630,6 +645,49 @@ function renderAnalytics() {
 }
 
 document.getElementById("refreshAnalytics").addEventListener("click", renderAnalytics);
+  function renderTimeline() {
+  const timeline = document.getElementById("incidentTimeline");
+
+  if (!timeline) return;
+
+  if (incidents.length === 0) {
+    timeline.textContent = "No incident activity available.";
+    return;
+  }
+
+  const sortedIncidents = [...incidents].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
+
+  timeline.replaceChildren();
+
+  sortedIncidents.forEach(incident => {
+    const entry = document.createElement("div");
+    entry.style.padding = "12px";
+    entry.style.marginBottom = "12px";
+    entry.style.borderLeft = "3px solid #27a6ed";
+    entry.style.background = "#172438";
+    entry.style.borderRadius = "8px";
+
+    const title = document.createElement("strong");
+    title.textContent = incident.title;
+
+    const details = document.createElement("p");
+    details.textContent =
+      `Severity: ${incident.severity} | Status: ${incident.status}`;
+
+    const date = document.createElement("small");
+    date.textContent = `Created: ${incident.createdAt}`;
+
+    entry.append(title, details, date);
+    timeline.appendChild(entry);
+  });
+}
+
+document.getElementById("refreshTimeline").addEventListener(
+  "click",
+  renderTimeline
+);
 renderIncidents();
 </script>
 
