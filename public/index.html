@@ -454,13 +454,17 @@ No registration test has been run.
 <p class="muted">Last Dashboard Load: <span id="systemLoadTime"></span></p>
   </section>
 </main>
-
 <script>
 const button = document.getElementById("runTest");
+const output = document.getElementById("results");
 
-// Keep all your existing JavaScript here.
+// Paste your complete existing JavaScript here,
+// starting with:
+// button.addEventListener("click", () => {
 
-// Timestamp code goes at the bottom:
+// Keep every existing function and event listener.
+
+// At the very end, immediately before </script>:
 const loadTime = document.getElementById("systemLoadTime");
 
 if (loadTime) {
@@ -470,6 +474,7 @@ if (loadTime) {
 
 </body>
 </html>
+
 button.addEventListener("click", () => {
   button.disabled = true;
 
