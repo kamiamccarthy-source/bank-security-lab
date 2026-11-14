@@ -2,7 +2,7 @@
 const express = require("express");
 const crypto = require("crypto");
 const { promisify } = require("util");
-
+const credentialMonitor = require("./credential-monitor");
 const app = express();
 const scrypt = promisify(crypto.scrypt);
 
@@ -263,7 +263,57 @@ app.get("/api/accounts/:id", authenticate, (req, res) => {
     currency: account.currency
   });
 });
+// Credential Security Monitor — fictional demo only
+app.post(
+  "/api/security/credential-monitor/demo",
+  authenticate,
+  (req, res) => {
+    try {
+      const demoEvents = [
+        {
+          eventType: "password-exposure-demo",
+          message: "password=DEMO_ONLY_FAKE_VALUE"
+        },
+        {
+          eventType: "pin-exposure-demo",
+          message: "pin=1234"
+        },
+        {
+          eventType: "otp-exposure-demo",
+          message: "otp=123456"
+        },
+        {
+          eventType: "token-exposure-demo",
+          message: "access_token=DEMO_ONLY_FAKE_TOKEN"
+        }
+      ];
 
+      const results = demoEvents.map(event =>
+        credentialMonitor.inspectEvent(event)
+      );
+
+      res.json({
+        message: "Fictional security test completed",
+        results
+      });
+    } catch {
+      res.status(500).json({
+        error: "Security test failed"
+      });
+    }
+  }
+);
+
+// Retrieve credential-monitor reports
+app.get(
+  "/api/security/credential-monitor/reports",
+  authenticate,
+  (req, res) => {
+    res.json({
+      reports: credentialMonitor.getReports()
+    });
+  }
+);
 // Start server
 app.listen(PORT, () => {
   console.log("Bank Security Lab running on port " + PORT);
